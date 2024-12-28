@@ -58,23 +58,37 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-  try{
-    const dealerships  =await Dealerships.find();
-    res.json(dealerships);
-  }catch(error){
-    res.status(500).json({ error: 'Error fetching dealerships' });
-  }
-});
+    try {
+      const dealerships = await Dealerships.find();
+      res.json(dealerships);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealerships' });
+    }
+  });
+  
+  app.get('/fetchDealers/:state', async (req, res) => {
+    try {
+      const dealerships = await Dealerships.find({ state: req.params.state });
+      res.json(dealerships);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealerships by state' });
+    }
+  });
+  
+  
 
 // Express route to fetch Dealers by a particular state
-app.get('/fetchDealers/:state', async (req, res) => {
-  try{
-    const dealerships = await Dealerships.find({state:req.params.state});
-    res.json(dealerships);
-  } catch(error){
-    res.status(500).json({ error: 'Error fetching dealerships by state'});
-  }
-});
+// app.get('/fetchDealers/:state', async (req, res) => {
+//   console.log('State parameter:', req.params.state);  // 打印接收到的 state 参数
+//   try {
+//     const dealerships = await Dealerships.find({ state: req.params.state });
+//     res.json(dealerships);
+//   } catch (error) {
+//     console.error('Error fetching dealerships:', error);  // 打印详细错误信息
+//     res.status(500).json({ error: 'Error fetching dealerships by state' });
+//   }
+// });
+
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {

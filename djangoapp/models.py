@@ -1,18 +1,40 @@
-# Uncomment the following imports before adding the Model code
+from django.db import models
+from django.utils.timezone import now
+from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import datetime
 
-# from django.db import models
-# from django.utils.timezone import now
-# from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 # Create your models here.
 
-# <HINT> Create a Car Make model `class CarMake(models.Model)`:
-# - Name
-# - Description
-# - Any other fields you would like to include in car make model
-# - __str__ method to print a car make object
+class CarMake(models.Model):
+    name = models.CharField(max_length=100,unique=True)
+    description  = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
 
+
+class CarModel(models.Model):
+    car_make = models.ForeignKey(CarMake,on_delete=models.CASCADE,related_name='models')
+    name = models.CharField(max_length=100)
+    dealer_id = models.IntegerField()
+    CAR_TYPES = [
+        ('SEDAN', 'Sedan'),
+        ('SUV', 'SUV'),
+        ('WAGON', 'Wagon'),
+        ('TRUCK', 'Truck'),
+    ]
+    type = models.CharField(max_length=10,choices=CAR_TYPES,default='SUV')
+    year = models.DateField()
+    color = models.CharField(max_length=100,null=True,blank=True)
+    horspepower = models.IntegerField(null=True,blank=True)
+    
+    
+    def __str__(self):
+        return f"{self.car_make.name} {self.name} ({self.type})"
+   
 
 # <HINT> Create a Car Model model `class CarModel(models.Model):`:
 # - Many-To-One relationship to Car Make model (One Car Make has many
